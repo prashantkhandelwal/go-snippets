@@ -1,23 +1,28 @@
+/**
+*   Program making use of goroutine and channel.
+*   This is the simple implementation of goroutines with channels.
+*   GoDoc Reference: https://golang.org/doc/effective_go.html#goroutines.
+**/
 package main
 
 import "fmt"
-import "time"
 
-func f(from string) {
-	for index := 0; index < 10; index++ {
-		time.Sleep(1000)
-		fmt.Println(from, ":", index)
-	}
+func hello(c chan string) {
+	//Receiving value from the channel
+	val := <-c
+	fmt.Println("Hello, ", val)
 }
 
 func main() {
+	messages := make(chan string)
 
-	go f("Khandelwal")
-	f("Prashant")
+	// Start a goroutine
+	go hello(messages)
 
-	go func(msg string){
-		fmt.Println(msg)
-	}("going")
+	// Sending value to the channel
+	messages <- "world"
 
+	// Used to stop the conteol at the console so
+	// we can see the output.
 	fmt.Scanln()
 }
